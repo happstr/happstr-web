@@ -38,7 +38,7 @@ class Happstr < Sinatra::Base
   end
 
   get '/prototype' do
-    send_file File.join(settings.public_folder, 'html/beta.html')
+    send_file File.join(settings.public_folder, 'beta.html')
   end
 
   get '/beta' do
