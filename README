@@ -1,0 +1,29 @@
+install rvm and ruby like this:
+
+bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+source ~/.bash_profile
+rvm install 1.9.3
+
+checkout repo and install shitz:
+
+git clone git@github.com:happstr/happstr.git
+cd happstr
+echo 'rvm ruby-1.9.2@happstr --create' > .rvmrc
+cd ../happstr
+gem install bundler
+bundle install
+
+
+Install Mongo Datastore:
+(if you have no brew, install like this:
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
+)
+
+brew install mongodb
+
+Run Mongo:
+mongod run --config /usr/local/Cellar/mongodb/2.0.2-x86_64/mongod.conf
+mongod run --config /usr/local/Cellar/mongodb/2.0.3-x86_64/mongod.conf
+
+run sinatra:
+rackup
