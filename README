@@ -6,13 +6,24 @@ rvm install 1.9.3
 
 checkout repo and install shitz:
 
-git clone git@github.com:happstr/happstr.git
-cd happstr
+git clone git@github.com:happstr/happstr-web.git
+cd happstr-web
+
+setup submodule read-write access:
+git submodule init
+open the file .git/config in your editor and change the line
+  [submodule "public"]
+    url = git://github.com/happstr/happstr-static.git
+to
+  [submodule "public"]
+    url = git@github.com:happstr/happstr-static.git
+git submodule update
+
+setup environment:
 echo 'rvm ruby-1.9.2@happstr --create' > .rvmrc
-cd ../happstr
+cd ../happstr-web
 gem install bundler
 bundle install
-
 
 Install Mongo Datastore:
 (if you have no brew, install like this:
@@ -27,3 +38,12 @@ mongod run --config /usr/local/Cellar/mongodb/2.0.3-x86_64/mongod.conf
 
 run sinatra:
 rackup
+
+optional install shotgun to have automatic reload of sinatra app on changes:
+gem install shotgun
+shotgun config.ru
+
+why this complicated submodule setup?
+Heroku has to be able to pull the submodule itself from the repository, but it doesn't use ssh keys we know. So it is not able to access the repository with read-write access, but only via read-only. These modes have different URLs (git@github.com:happstr... vs. git://github.com/happstr). Locally, we want the first URL, on Heroku we want to have the second. The way git handles submodules is that is copies the check-in file .gitmodules to .git/config for your local repo instance. You can change your .git/config to the read-write url before updating the submodules whereas Heroku will always use the URL in .gitmodules.
+
+You can read more about all this here: http://365git.tumblr.com/post/12581972612/set-up-a-submodule-where-only-you-have-write-access
